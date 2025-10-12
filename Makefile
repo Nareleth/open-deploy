@@ -1,9 +1,10 @@
 DEPLOY		:= deploy/opendeploy-cli.py
+SERVER		:= server/server.py
 GUESTNAME 	:= test
 ISO			:= ~/Downloads/ISO/alpine-standard-3.22.2-x86_64.iso
 PYTHON		:= python3
 
-.PHONY: clean deploy
+.PHONY: clean deploy run
 
 all: deploy boot
 
@@ -12,6 +13,10 @@ deploy:
 
 boot:
 	$(PYTHON) $(DEPLOY) -b $(GUESTNAME)
+
+
+run:
+	$(PYTHON) $(SERVER)
 
 clean:
 	rm *.qcow2
