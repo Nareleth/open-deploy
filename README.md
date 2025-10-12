@@ -21,6 +21,8 @@ None yet
 
 
 ## To Do:
+- make -h the default for the cli tool
+- server should run the comand on a node
 - create server engine
 - Create web UI
 - create login for server
