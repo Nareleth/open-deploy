@@ -22,7 +22,6 @@ None yet
 
 ## To Do:
 - create server engine
-- Dockerfile to host server
 - Create web UI
 - create login for server
 - server can run the cli tool
