@@ -1,4 +1,4 @@
-DEPLOY		:= deploy/deploy-qemu.py
+DEPLOY		:= deploy/opendeploy-cli.py
 GUESTNAME 	:= test
 ISO			:= ~/Downloads/ISO/alpine-standard-3.22.2-x86_64.iso
 PYTHON		:= python3
