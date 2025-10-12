@@ -3,13 +3,21 @@ import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 
+
+def loadConfig():
+    with open ('conf/config.json', 'r') as f:
+        return json.load(f)
 
 # Boot existing guest VM
-def bootGuest(guestName):
-    print(f"Booting guest: {guestName}")
+def bootGuest(config, guestName):
 
-    bootConfig = f"{guestName}.json"
+    ROOT_PATH = Path(config['vm_root']).expanduser()
+    bootConfig = f"{ROOT_PATH}/{guestName}/{guestName}.json"
+
+    
+    print(f"Booting guest: {guestName}")
 
     # Validate input
     if not os.path.exists(bootConfig):
@@ -19,37 +27,49 @@ def bootGuest(guestName):
     
     # Read config file
     with open(bootConfig, 'r') as f:
-        config = json.load(f)
+        guestConfig = json.load(f)
 
     subprocess.run([
         "qemu-system-x86_64",
-        "-m", config["memory"],
-        "-smp", config["cores"],
-        config["kvm"],
-        "-cdrom", config["cdrom"],
-        "-hda", config["volume"],
-        "-boot", config["boot"],
-        "-net", config["net1"], 
-        "-net", config["net2"], 
+        "-m", guestConfig["memory"],
+        "-smp", guestConfig["cores"],
+        guestConfig["kvm"],
+        "-cdrom", guestConfig["cdrom"],
+        "-hda", guestConfig["volume"],
+        "-boot", guestConfig["boot"],
+        "-net", guestConfig["net1"], 
+        "-net", guestConfig["net2"], 
     ])
 
 
 # Create a new image for the guest VM
-def createImage(guestName, size):
-    volumeImage =  guestName + ".qcow2"
-    volumeSize = size
+def createImage(config, guestName, volumeSize):
+    ROOT_PATH = Path(config['vm_root']).expanduser()
+    volumeImage =  f"{ROOT_PATH}/{guestName}/{guestName}.qcow2"
 
     print(f"Creating new volume with size: {volumeSize}")
+
+    # Create dir if not exists
+    if not os.path.exists(f"{ROOT_PATH}/{guestName}/"):
+        os.makedirs(f"{ROOT_PATH}/{guestName}/")
+
 
     # Wrapper for qemu-img to create an image
     subprocess.run(["qemu-img", "create", "-f", "qcow2", volumeImage, volumeSize]) 
 
 
 # Create the guest VM
-def createGuest(guestName, guestMemory, guestCores, guestISO, guestVolume):
-    guestConfig = guestName + ".json"
+def createGuest(config, guestName, guestMemory, guestCores, guestISO, guestVolume):
+    ROOT_PATH = Path(config['vm_root']).expanduser()
+    guestConfigPath = f"{ROOT_PATH}/{guestName}/{guestName}.json"
 
-    config = {
+    # Create dir if not exists
+    if not os.path.exists(f"{ROOT_PATH}/{guestName}/"):
+        os.makedirs(f"{ROOT_PATH}/{guestName}/")
+
+        
+    # Define the config for guest parameters
+    guestConfig = {
         "name":     guestName,
         "memory":   guestMemory,
         "cores":    guestCores,
@@ -62,10 +82,10 @@ def createGuest(guestName, guestMemory, guestCores, guestISO, guestVolume):
     }
 
     # Create boot instructions
-    with open(guestConfig, 'w') as f:
-        json.dump(config, f, indent=2)
+    with open(guestConfigPath, 'w') as f:
+        json.dump(guestConfig, f, indent=2)
 
-    print(f"Config {guestConfig} created")
+    print(f"Config {guestConfigPath} created")
 
 
 # Main
@@ -81,10 +101,12 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--volume", help="Create a volume")
     args = parser.parse_args()
 
+    config = loadConfig()
+
 
     # Boots an existing VM
     if args.boot:
-        bootGuest(args.boot)
+        bootGuest(config, args.boot)
 
     # Create new VM
     if args.create:
@@ -118,11 +140,11 @@ if __name__ == "__main__":
 
         # Volume
         if args.volume:
-            createImage(guestName, args.volume)
+            createImage(config, guestName, args.volume)
         else:
             print("Error: No volume given to guest machine")
             sys.exit(1)
         
         # Create Guest VM
-        createGuest(guestName, guestMemory, guestCores, guestISO, guestName + ".qcow2")
+        createGuest(config, guestName, guestMemory, guestCores, guestISO, guestName + ".qcow2")
     

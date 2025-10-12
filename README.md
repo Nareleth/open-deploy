@@ -21,7 +21,6 @@ None yet
 
 
 ## To Do:
-- output vm artifacts to a special directory
 - create server engine
 - Dockerfile to host server
 - Create web UI
