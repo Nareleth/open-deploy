@@ -17,7 +17,7 @@ create_guest = Endpoint(
     description="Create a guest VM",
     methods="POST",
     url="/api/createguest",
-    parameters=["name", "memory"]
+    parameters=["name", "memory", "cores", "cdrom", "volume"]
 )
 
 # Add api to endpoint dict

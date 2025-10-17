@@ -39,6 +39,29 @@ def getAPI():
 
 
 # Create Guest VM
+@server.route('/api/createguest', methods=["POST"])
+def createGuest():
+    # Get request data
+    data = request.get_json()
+
+    name    = data.get('name'),
+    memory  = data.get('memory'),
+    cores   = data.get('cores'),
+    cdrom   = data.get('cdrom'),
+    volume   = data.get('volume')
+
+    response = {
+        'name':     name,
+        'memory':   memory,
+        'cores':    cores,
+        'cdrom':    cdrom,
+        'volume':   volume
+    }
+
+    return jsonify(response)
+
+
+# Create Guest VM
 @server.route('/newguest')
 def newGuest():
     result = subprocess.run(["python3", "bin/opendeploy-cli.py", "-c", "-n" "Alpine", "-m", "1024", "-cpu", "2", "-i", "resources/iso/alpine-standard-3.22.2-x86_64.iso", "-v", "20G"])

@@ -32,7 +32,10 @@ api:
 
 deploy:
 #	$(PYTHON) $(DEPLOY) -c -n $(GUESTNAME) -m 1024 -cpu 2 -i $(ISO) -v 20G
-	$(CURL) $(HOSTNAME)/newguest
+#	$(CURL) $(HOSTNAME)/newguest
+	$(CURL) -X POST $(HOSTNAME)/api/createguest \
+	-H "Content-Type: application/json" \
+	-d '{"name": "test-vm", "memory": "1024", "cores": "2", "cdrom": "resources/iso/alpine-standard-3.22.2-x86_64.iso", "volume": "20G" }'
 
 boot:
 	$(PYTHON) $(DEPLOY) -b $(GUESTNAME)
