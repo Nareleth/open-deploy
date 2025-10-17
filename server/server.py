@@ -1,6 +1,6 @@
 import subprocess
 from api import endpoints
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 
 server = Flask(__name__)
 
@@ -8,7 +8,19 @@ server = Flask(__name__)
 # Default
 @server.route('/')
 def index():
-    return render_template('home.html')
+    return redirect(url_for('login'))
+
+
+# Login
+@server.route('/login')
+def login():
+    return render_template('login.html')
+
+
+# Dashboard
+@server.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 
 # API

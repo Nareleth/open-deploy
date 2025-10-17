@@ -22,6 +22,13 @@ None yet
 
 ## To Do:
 ### Active:
+- Create base dashboard page
+- Create form for running api calls
+
+### Init:
+- Create installation script that sets up config and vm root
+- create application home directory structure
+- Create uninstall script
 
 ### CLI:
 - make -h the default for the cli tool
@@ -34,8 +41,8 @@ None yet
 - Log the requests and output into a file
 
 ### Server App:
-- Create web UI
 - create login for server
+- make pages look pretty
 - sanitize api input
 
 ### Proxy:
