@@ -27,6 +27,9 @@ run:
 	$(PYTHON) $(SERVER)
 
 
+api:
+	$(CURL) -X GET $(HOSTNAME)/api
+
 deploy:
 #	$(PYTHON) $(DEPLOY) -c -n $(GUESTNAME) -m 1024 -cpu 2 -i $(ISO) -v 20G
 	$(CURL) $(HOSTNAME)/newguest

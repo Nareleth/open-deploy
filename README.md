@@ -21,10 +21,15 @@ None yet
 
 
 ## To Do:
+- create server engine (handle requests)
+- Parse user input and call CLI tool directly
+
+
 - make -h the default for the cli tool
-- server should run the comand on a node
-- create server engine
+- server should run on host or node when setup
+
 - Create web UI
+- implement a database 
 - create login for server
-- server can run the cli tool
+- sanitize api input
 - set up proxy
