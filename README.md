@@ -28,6 +28,7 @@ None yet
 - server should run on host or node when setup
 
 ### Server Engine:
+- Delete a guest
 - Thread the subprocess for booting and return if it simply runs or not. we dont need output yet
 - implement a database 
 - Log the requests and output into a file
@@ -39,3 +40,6 @@ None yet
 
 ### Proxy:
 - set up proxy
+
+### Scalability:
+Ensure we can IAC deployments in a devopsy method
