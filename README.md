@@ -21,15 +21,21 @@ None yet
 
 
 ## To Do:
-- create server engine (handle requests)
-- Parse user input and call CLI tool directly
+### Active:
 
-
+### CLI:
 - make -h the default for the cli tool
 - server should run on host or node when setup
 
-- Create web UI
+### Server Engine:
+- Thread the subprocess for booting and return if it simply runs or not. we dont need output yet
 - implement a database 
+- Log the requests and output into a file
+
+### Server App:
+- Create web UI
 - create login for server
 - sanitize api input
+
+### Proxy:
 - set up proxy

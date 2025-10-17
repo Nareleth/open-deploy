@@ -75,7 +75,7 @@ def createGuest(config, guestName, guestMemory, guestCores, guestISO, guestVolum
         "cores":    guestCores,
         "kvm":      "-enable-kvm",
         "cdrom":    guestISO,
-        "volume":   guestVolume,
+        "volume":   f"{ROOT_PATH}/{guestName}/{guestVolume}",
         "boot":     "d",
         "net1":     "nic",
         "net2":     "user"

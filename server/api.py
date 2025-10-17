@@ -11,6 +11,16 @@ class Endpoint:
 endpoints = {}
 
 
+# API to boot guest VM
+boot_guest = Endpoint(
+    name="boot_guest",
+    description="Boot a guest VM",
+    methods="POST",
+    url="/api/bootguest",
+    parameters=["name"]
+)
+
+
 # API to create a guest VM
 create_guest = Endpoint(
     name="create_guest",
@@ -20,5 +30,7 @@ create_guest = Endpoint(
     parameters=["name", "memory", "cores", "cdrom", "volume"]
 )
 
-# Add api to endpoint dict
+
+# Add apis to endpoint dict
+endpoints["boot_guest"] = boot_guest
 endpoints["create_guest"] = create_guest

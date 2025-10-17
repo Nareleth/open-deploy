@@ -44,32 +44,55 @@ def createGuest():
     # Get request data
     data = request.get_json()
 
-    name    = data.get('name'),
-    memory  = data.get('memory'),
-    cores   = data.get('cores'),
-    cdrom   = data.get('cdrom'),
-    volume   = data.get('volume')
+    name    = data.get('name')
+    memory  = data.get('memory')
+    cores   = data.get('cores')
+    cdrom   = data.get('cdrom')
+    volume  = data.get('volume')
 
+    # Run subprocess
+    result = subprocess.run(["python3", "bin/opendeploy-cli.py", "-c", "-n", str(name), "-m", str(memory), "-cpu", str(cores), "-i", str(cdrom), "-v", str(volume)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    
+    # Generate response message
     response = {
-        'name':     name,
-        'memory':   memory,
-        'cores':    cores,
-        'cdrom':    cdrom,
-        'volume':   volume
+        'api_name':     name,
+        'api_memory':   memory,
+        'api_cores':    cores,
+        'api_cdrom':    cdrom,
+        'api_volume':   volume,
+        'stdout':       result.stdout,
+        'stderr':       result.stderr,
+        'returncode':   result.returncode
     }
 
+    # Return response
     return jsonify(response)
 
 
-# Create Guest VM
-@server.route('/newguest')
-def newGuest():
-    result = subprocess.run(["python3", "bin/opendeploy-cli.py", "-c", "-n" "Alpine", "-m", "1024", "-cpu", "2", "-i", "resources/iso/alpine-standard-3.22.2-x86_64.iso", "-v", "20G"])
-    return jsonify({
-        'stdout': result.stdout,
-        'stderr': result.stderr,
-        'returncode': result.returncode
-    })
+# Boot Guest VM
+@server.route('/api/bootguest', methods=["POST"])
+def bootGuest():
+    # Get request data
+    data = request.get_json()
+    name = data.get('name')
 
+    # Run subprocess
+    result = subprocess.run(["python3", "bin/opendeploy-cli.py", "-b", str(name)])
+
+    # Generate response message
+    response = {
+        'api_name':     name,
+        'stdout':       result.stdout,
+        'stderr':       result.stderr,
+        'returncode':   result.returncode
+    }
+
+    # Return response
+    return jsonify(response)
+
+
+
+
+# Main Handler
 if __name__ == '__main__':
     server.run(host='0.0.0.0', port=8080, debug=True)

@@ -1,21 +1,25 @@
+# Target
 VERSION		:= 0.01
 TARGET		:= open-deploy
 TAG			:= $(TARGET):$(VERSION)
 
+# Conf
 VMROOT		:= $(shell echo ~/vms)
 BIN			:= bin
 DEPLOY		:= $(bin)/opendeploy-cli.py
 SERVER		:= server/server.py
 ISO			:= resources/iso/*.iso
 
-GUESTNAME 	:= test
+# Params
 HOSTNAME	:= 127.0.0.1:8080
+GUESTNAME 	:= test-vm
 
+# Commands
 CURL		:= curl
 PYTHON		:= python3
 DOCKER		:= docker
 
-.PHONY: boot build clean deploy run
+.PHONY: boot build clean create run
 
 all: run
 
@@ -30,15 +34,16 @@ run:
 api:
 	$(CURL) -X GET $(HOSTNAME)/api
 
-deploy:
-#	$(PYTHON) $(DEPLOY) -c -n $(GUESTNAME) -m 1024 -cpu 2 -i $(ISO) -v 20G
-#	$(CURL) $(HOSTNAME)/newguest
+create:
 	$(CURL) -X POST $(HOSTNAME)/api/createguest \
 	-H "Content-Type: application/json" \
 	-d '{"name": "test-vm", "memory": "1024", "cores": "2", "cdrom": "resources/iso/alpine-standard-3.22.2-x86_64.iso", "volume": "20G" }'
 
 boot:
-	$(PYTHON) $(DEPLOY) -b $(GUESTNAME)
+	$(CURL) -X POST $(HOSTNAME)/api/bootguest \
+	-H "Content-Type: application/json" \
+	-d '{"name": "test-vm"}'
+
 
 clean:
 	rm -rf $(VMROOT)
