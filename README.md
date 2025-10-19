@@ -25,6 +25,9 @@ None yet
 - Create base dashboard page
 - Create form for running api calls
 
+### Feature:
+- Create network TAP/vlan/adapter
+
 ### Init:
 - Create installation script that sets up config and vm root
 - create application home directory structure
